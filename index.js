@@ -42,3 +42,6 @@ client.on("messageCreate", async(message) => {
 });
 
 client.login(process.env.TOKEN)
+// node index.js zum starten
+// strg + c zum beenden
+// strg + s zum speichern
