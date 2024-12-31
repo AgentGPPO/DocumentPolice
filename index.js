@@ -1,5 +1,7 @@
-require('dotenv').config();
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
+import "dotenv/config";
+import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
+import { readFileSync } from "node:fs";
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -15,9 +17,10 @@ const client = new Client({
     Partials.Reaction
   ]
 });
-const FORBIDDEN_WORDS = require('./blocked.json');
 
-client.on("ready", () => {
+const FORBIDDEN_WORDS = JSON.parse(readFileSync('./blocked.json'));
+
+client.on(Events.ClientReady, () => {
   console.log("I'm online!");
   client.user.setActivity({
     name: "no avoiding the automod",
@@ -25,10 +28,10 @@ client.on("ready", () => {
   });
 });
 
-client.on("messageCreate", async(message) => {
-  for (const attachment of message.attachments) {
-    if (attachment[1].contentType.startsWith("text/plain")) {
-      let content = await (await fetch(attachment[1].url)).text();
+client.on(Events.MessageCreate, async (message) => {
+  for (const [, attachment] of message.attachments) {
+    if (attachment.contentType.startsWith("text/plain")) {
+      let content = await (await fetch(attachment.url)).text();
       for (const forbiddenWord of FORBIDDEN_WORDS) {
         if (content.includes(forbiddenWord)) {
           await message.delete();
