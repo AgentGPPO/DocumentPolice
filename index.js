@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
+import { ActivityType, Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import { readFileSync } from "node:fs";
 
 const client = new Client({
@@ -22,9 +22,8 @@ const FORBIDDEN_WORDS = JSON.parse(readFileSync('./blocked.json'));
 
 client.on(Events.ClientReady, () => {
   console.log("I'm online!");
-  client.user.setActivity({
-    name: "no avoiding the automod",
-    type: "PLAYING"
+  client.user.setActivity('no avoiding the automod', {
+    type: ActivityType.Playing
   });
 });
 
