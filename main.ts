@@ -33,7 +33,9 @@ client.on(Events.ClientReady, () => {
 
 client.on(Events.MessageCreate, async (message) => {
   for (const [, attachment] of message.attachments) {
-    if (attachment.contentType && attachment.contentType.startsWith("text/plain")) {
+    if (
+      attachment.contentType && attachment.contentType.startsWith("text/plain")
+    ) {
       const content = await (await fetch(attachment.url)).text();
       for (const forbiddenWord of FORBIDDEN_WORDS) {
         if (content.includes(forbiddenWord)) {
